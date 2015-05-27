@@ -112,7 +112,7 @@ exports.graphByID = function(req, res, next, id) {
  */
 exports.hasAuthorization = function(req, res, next) {
 	//if (req.graph.user.id !== req.user.id) {
-	//	return res.status(403).send('User is not authorized');
+		//return res.status(403).send('quedas mal');
 	//}
 	next();
 };

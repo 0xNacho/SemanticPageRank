@@ -9,7 +9,7 @@ var mongoose = require('mongoose'),
 
 exports.calculateGraphParameters = function(graph, callback){
 _ = require('lodash');
-	graph.text = graph.text.replace(/\./g, '\.\n');
+	graph.text = graph.text.replace(/\./g, '\n');
 
 	graph.text = graph.text.toLowerCase()
 	//Check auto language
@@ -105,7 +105,7 @@ _ = require('lodash');
 					graph.finalTextWithCssPresentation+= sentencesWithStopWords[key];
 
 			}
-			graph.json = JSON.stringify({"nodes": graph_nodes, "links": graph_links});
+			graph.json = JSON.stringify({"nodes": graph_nodes, "links": []});
 			callback(graph);
 
 	})

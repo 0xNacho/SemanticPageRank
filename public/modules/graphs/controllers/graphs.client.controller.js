@@ -108,8 +108,6 @@ angular.module('graphs').controller('GraphsController', ['$scope', '$stateParams
 
 				  var labels = gnodes.append("text")
 				      .text(function(d) { return d.name; });
-
-				  console.log(labels);
 				    
 				  force.on("tick", function() {
 				    link.attr("x1", function(d) { return d.source.x; })
