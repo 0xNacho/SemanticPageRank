@@ -1,0 +1,40 @@
+<section data-ng-controller="GraphsController" data-ng-init="findOne()">
+    <div class="page-header">
+        <h1>Edit Graph</h1>
+    </div>
+    <div class="col-md-12">
+        <form class="form-horizontal" data-ng-submit="update()" novalidate>
+            <fieldset>
+                <div class="form-group">
+                    <label class="control-label" for="name">Graph Name</label>
+                    <div class="controls">
+                        <input type="text" data-ng-model="graph.name" id="name" class="form-control" placeholder="Graph Name..." required>
+                    </div>
+
+                    <label class="control-label" for="text">Text</label>
+                    <div class="controls">
+                        <textarea type="text" data-ng-model="graph.text" name="text" id="text" class="form-control" placeholder="Text..."  rows="12" required></textarea>
+                    </div>
+                    <div class="controls">
+                        <label class="control-label" for="language">Text language:</label>
+                        <select data-ng-model="graph.language" class="form-control">
+                            <option value="spanish">ES</option>
+                            <option value="english">EN</option>
+                            <option value="auto">Auto</option>
+                        </select>
+                    </div>
+                     <div class="controls">
+                        <label class="control-label" for="textPercent">Text Percentage in summary:</label>
+                        <input type="number" min="1" max="100" data-ng-model="graph.textPercent" name="textPercent" id="textPercent" class="form-control" placeholder="1-100" required/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Update" class="btn btn-default">
+                </div>
+				<div data-ng-show="error" class="text-danger">
+					<strong data-ng-bind="error"></strong>
+				</div>
+            </fieldset>
+        </form>
+    </div>
+</section>
