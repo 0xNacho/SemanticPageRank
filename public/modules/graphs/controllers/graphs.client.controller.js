@@ -1,9 +1,8 @@
 'use strict';
 var aa;
 // Graphs controller
-angular.module('graphs').controller('GraphsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Graphs',
-	function($scope, $stateParams, $location, Authentication, Graphs) {
-		$scope.authentication = Authentication;
+angular.module('graphs').controller('GraphsController', ['$scope', '$stateParams', '$location', 'Graphs',
+	function($scope, $stateParams, $location, Graphs) {
 
 		// Create new Graph
 		$scope.create = function() {

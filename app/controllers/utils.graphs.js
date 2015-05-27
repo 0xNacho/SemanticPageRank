@@ -9,6 +9,8 @@ var mongoose = require('mongoose'),
 
 exports.calculateGraphParameters = function(graph, callback){
 _ = require('lodash');
+	graph.text = graph.text.replace(/\./g, '\.\n');
+
 	graph.text = graph.text.toLowerCase()
 	//Check auto language
 	if(graph.language === 'auto'){
@@ -27,10 +29,13 @@ _ = require('lodash');
 			remove_duplicates: false
 		});
 	}
-
+	//Replace some char for a more precise analysis
 	for(var i = 0 ; i < sentences.length; i++){
-		console.log(sentences[i]+"\n")
+		for(var j = 0; j< sentences[i].length; j++){
+			sentences[i][j] = sentences[i][j].replace(/[,;:]/g, '');
+		}
 	}
+
 
 	//At this point we have sentences without stop-words.
 	var newGraph  = []

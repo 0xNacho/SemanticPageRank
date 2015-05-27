@@ -16,7 +16,6 @@ var mongoose = require('mongoose'),
  */
 exports.create = function(req, res) {
 	var graph = new Graph(req.body);
-	graph.user = req.user;
 	graphUtils.calculateGraphParameters(graph, function(newGraph){
 		//Save newGraph
 		newGraph.save(function(err) {
@@ -112,8 +111,8 @@ exports.graphByID = function(req, res, next, id) {
  * Graph authorization middleware
  */
 exports.hasAuthorization = function(req, res, next) {
-	if (req.graph.user.id !== req.user.id) {
-		return res.status(403).send('User is not authorized');
-	}
+	//if (req.graph.user.id !== req.user.id) {
+	//	return res.status(403).send('User is not authorized');
+	//}
 	next();
 };
