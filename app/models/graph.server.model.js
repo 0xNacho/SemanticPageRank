@@ -44,6 +44,9 @@ var GraphSchema = new Schema({
 	},
 	json: {
 		type: String
+	},
+	debugGraph:{
+		type: String
 	}
 });
 

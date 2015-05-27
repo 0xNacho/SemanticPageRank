@@ -9,7 +9,7 @@ var mongoose = require('mongoose'),
 
 exports.calculateGraphParameters = function(graph, callback){
 _ = require('lodash');
-	graph.text = graph.text.replace(/\./g, '\n');
+	//graph.text = graph.text.replace(/\./g, '\n');
 
 	graph.text = graph.text.toLowerCase()
 	//Check auto language
@@ -33,6 +33,7 @@ _ = require('lodash');
 	for(var i = 0 ; i < sentences.length; i++){
 		for(var j = 0; j< sentences[i].length; j++){
 			sentences[i][j] = sentences[i][j].replace(/[,;:]/g, '');
+			console.log("Sentence ["+i+"]["+j+"] = "+ sentences[i][j])
 		}
 	}
 
@@ -40,7 +41,6 @@ _ = require('lodash');
 	//At this point we have sentences without stop-words.
 	var newGraph  = []
 	var temporal = {}
-	var graph_links = []
 	for(var i = 0 ; i < sentences.length; i++){
 		var sentence_words = sentences[i]
 		for(var j = 0; j < sentence_words.length; j++){
@@ -50,11 +50,11 @@ _ = require('lodash');
 					if(temporal[sentence_words[j]] == undefined)
 						temporal[sentence_words[j]] = new Array()
 					temporal[sentence_words[j]].push(sentence_words[k]);
-					graph_links.push({"source": j, "target": k});
 				}
 			}
 		}
 	}
+	console.log("Temporal: "+JSON.stringify(temporal))
 	//PageRank graph.
 	var finalGraph = [];
 	var i = 0;
@@ -65,15 +65,23 @@ _ = require('lodash');
 		key_number[key] = i;
 		i++;
 	}
+	console.log("NumberKey: "+JSON.stringify(number_key))
+	console.log("KeyNumber: "+JSON.stringify(key_number))
 
 	for(var key in temporal){
 		var array = [];
 		for(var j = 0 ; j < temporal[key].length; j++){
 			array.push(key_number[temporal[key][j]]);
-		}	
+		}
+		console.log("Adding to final graph: "+array)
 		finalGraph.push(array);
 	}
 
+	console.log("Final Graph:")
+	for(var i = 0 ; i < finalGraph.length; i++){
+		console.log(finalGraph[i]);
+	}
+	console.log('----------')
 	var Pagerank = require('pagerank-js');
 	var nodes = finalGraph;
 	var linkProb = 0.85; //high numbers are more stable
@@ -92,20 +100,34 @@ _ = require('lodash');
 				for(var j = 0 ; j < sentences[i].length; j++){
 					var index = key_number[sentences[i][j]];
 					total_sentence_score+=res[index];
+					console.log("Word: "+number_key[index]+" with index: "+res[index])
 				}
 				sentences_score[i] = total_sentence_score;
+				console.log("Sentences "+i+" with score: "+total_sentence_score)
 				total_sentence_score = 0;
+
 			}	    
 			var sentencesWithStopWords = graph.text.split('\n')
 			graph.finalTextWithCssPresentation = '';
 			for(var key in sentences_score){
 				if(sentences_score[key] <= (graph.textPercent/100.0)){
-					graph.finalTextWithCssPresentation+= '<u>'+sentencesWithStopWords[key]+'</u>';
+					graph.finalTextWithCssPresentation+= '<u>'+sentencesWithStopWords[key]+'</u><br/>';
 				}else
-					graph.finalTextWithCssPresentation+= sentencesWithStopWords[key];
+					graph.finalTextWithCssPresentation+= sentencesWithStopWords[key]+'<br/>';
 
 			}
 			graph.json = JSON.stringify({"nodes": graph_nodes, "links": []});
+
+			//Create Debug Grapg
+			var debugGraph = '';
+			for(var i = 0; i < finalGraph.length; i++){
+				var wordsArray = new Array();
+				for(var j = 0; j  < finalGraph[i].length;j++){
+					wordsArray.push(number_key[finalGraph[i][j]]);
+				}
+				debugGraph+=number_key[i]+' -> '+'['+wordsArray+']<br/>';
+			}
+			graph.debugGraph = debugGraph;
 			callback(graph);
 
 	})
